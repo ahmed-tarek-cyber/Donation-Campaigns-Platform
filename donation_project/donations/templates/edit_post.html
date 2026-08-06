@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Edit Post{% endblock %}
+{% block content %}
+<div class="form-container">
+    <h1>Edit Post</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <label for="{{ form.title.id_for_label }}">Title:</label>
+        {{ form.title }}
+
+        <label for="{{ form.description.id_for_label }}">Description:</label>
+        {{ form.description }}
+
+        <label for="{{ form.target_amount.id_for_label }}">Target Amount:</label>
+        {{ form.target_amount }}
+
+        <label>Current Image:</label>
+        <p>
+        {% if form.instance.image_file %}
+            <img src="{{ form.instance.image_file.url }}" alt="Current Image" style="max-width:120px; border-radius:6px;">
+        {% elif form.instance.image_url %}
+            <img src="{{ form.instance.image_url }}" alt="Current Image" style="max-width:120px; border-radius:6px;">
+        {% else %}
+            No image
+        {% endif %}
+        </p>
+
+        
+        
+        <label for="{{ form.image_file.id_for_label }}">OR Upload New Image File:</label>
+        {{ form.image_file }}
+
+        <p class="or-text">OR</p>
+
+        <label for="{{ form.image_url.id_for_label }}">Image URL:</label>
+        {{ form.image_url }}
+
+        <label for="{{ form.video_url.id_for_label }}" style="margin-top: 15px;">YouTube Video Link:</label>
+        {{ form.video_url }}
+
+        <label for="{{ form.start_time.id_for_label }}">Start Time:</label>
+        {{ form.start_time }}
+
+        <label for="{{ form.end_time.id_for_label }}">End Time:</label>
+        {{ form.end_time }}
+
+
+        <button type="submit" class="btn btn-success">Update</button>
+    </form>
+</div>
+{% endblock %}

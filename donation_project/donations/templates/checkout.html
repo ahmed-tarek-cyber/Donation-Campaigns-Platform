@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Checkout{% endblock %}
+{% block content %}
+<div class="checkout-wrapper">
+  <div class="checkout-box">
+    <h2>Thank you for your donation, you are kind!</h2>
+    <p class="donation-total">Total Donation: ${{ total|floatformat:2 }}</p>
+
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" name="confirm_checkout" value="1" class="btn btn-success">Confirm</button>
+      <a href="{% url 'cart' %}" class="btn btn-danger">Back to Cart</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

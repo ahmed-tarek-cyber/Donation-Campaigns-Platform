@@ -1,0 +1,30 @@
+{% load static %}
+ 
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}Site{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    {% if user.is_authenticated %}
+    <nav>
+        <div class="nav-left">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'about' %}">About Us</a>
+            <a href="{% url 'top_donors' %}">Top Donors</a>
+        </div>
+        <div class="nav-right">
+            <a href="{% url 'cart' %}">Cart ({{ cart_count }})</a>
+            <a href="{% url 'create_post' %}">New Post</a>
+            <a class="logout-link" href="{% url 'logout' %}">Logout</a>
+        </div>
+    </nav>
+    {% endif %}
+
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Top Donors{% endblock %}
+{% block content %}
+<div style="text-align: center; padding: 20px;">
+    <h1 style="color: #ff6b9a;">Top Donors</h1>
+    <div style="max-width: 600px; margin: 20px auto; background-color: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); overflow: hidden;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr class="header-row">
+                    <th style="padding: 12px; border-bottom: 2px solid #ddd;">Rank</th>
+                    <th style="padding: 12px; border-bottom: 2px solid #ddd; text-align: left;">Name</th>
+                    <th style="padding: 12px; border-bottom: 2px solid #ddd;">Total Donations</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for donor in donors %}
+                <tr style="border-bottom: 1px solid #eee;" {% if forloop.counter <= 3 %} class="top-donor-row" {% endif %}>
+                    <td style="padding: 12px;">{{ forloop.counter }}</td>
+                    <td style="padding: 12px; font-weight: bold; text-align: left;">{{ donor.name }}</td>
+                    <td style="padding: 12px;">${{ donor.total|floatformat:2 }}</td>
+                </tr>
+                {% empty %}
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td colspan="3" style="padding: 12px; text-align: center; color: #777;">No donors yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

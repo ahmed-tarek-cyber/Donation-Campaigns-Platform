@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block content %}
+<div class="post-detail">
+    <div class="detail-image-box">
+        {% if post.image_file %}
+            <img src="{{ post.image_file.url }}" alt="{{ post.title }}" class="detail-image">
+        {% elif post.image_url %}
+            <img src="{{ post.image_url }}" alt="{{ post.title }}" class="detail-image">
+        {% else %}
+            <div class="no-image-large">No image</div>
+        {% endif %}
+    </div>
+
+    <h1>{{ post.title }}</h1>
+
+    {% if post.get_youtube_id %}
+    <div class="detail-image-box" style="margin-top: 20px; margin-bottom: 20px;">
+        <iframe 
+            width="100%" 
+            height="400" 
+            src="https://www.youtube.com/embed/{{ post.get_youtube_id }}?rel=0" 
+            title="YouTube video player" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            referrerpolicy="strict-origin-when-cross-origin" 
+            allowfullscreen 
+            style="border-radius: 8px;">
+        </iframe>
+    </div>
+    {% endif %}
+
+    <p style="white-space: pre-wrap;">{{ post.description }}</p>
+
+    <p><strong>Publisher:</strong> {{ post.user.first_name }} {{ post.user.last_name }}</p>
+    <p><strong>Email:</strong> {{ post.user.email }}</p>
+    {% if post.user.userprofile.mobile_phone %}
+        <p><strong>Phone:</strong> {{ post.user.userprofile.mobile_phone }}</p>
+    {% endif %}
+    <p><strong>Date of publishing:</strong> {{ post.created_at|date:"M d, Y" }}</p>
+    <p><strong>Time of publishing:</strong> {{ post.created_at|time:"g:i A" }}</p>
+
+    <p><strong>Start Time:</strong> {{ post.start_time }}</p>
+    <p><strong>End Time:</strong> {{ post.end_time }}</p>
+
+    <div class="countdown-box"
+         data-start="{{ post.start_time|date:'Y-m-d H:i:s' }}"
+         data-end="{{ post.end_time|date:'Y-m-d H:i:s' }}"
+         data-id="{{ post.id }}">
+        <p id="countdown{{ post.id }}" class="countdown-text">Loading...</p>
+    </div>
+
+    <div class="post-actions">
+        <a class="btn" id="cart-btn{{ post.id }}" href="{% url 'add_to_cart' post.id %}">Add to Cart</a>
+        {% if post.user == request.user %}
+            <a class="btn" href="{% url 'edit_post' post.id %}">Edit</a>
+            <a class="btn btn-danger" href="{% url 'delete_post' post.id %}">Delete</a>
+        {% endif %}
+    </div>
+
+    <p><strong>Target:</strong> ${{ post.target_amount }}</p>
+    <p class="current-amount"><strong>Current:</strong> ${{ post.current_amount }}</p>
+</div>
+
+<script src="{% static 'counter.js' %}"></script>
+{% endblock %}

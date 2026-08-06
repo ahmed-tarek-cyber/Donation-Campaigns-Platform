@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+{% if request.user.is_authenticated %}
+    <h2 style="text-align: center; margin-bottom: 20px;">
+        Hello {{ request.user.first_name }} {{ request.user.last_name }}
+    </h2>
+{% endif %}
+
+<div class="centered-search">
+    <form method="get" action="{% url 'search' %}">
+        <input type="text" name="q" placeholder="Search..." value="{{ request.GET.q }}">
+        <input type="date" name="date" value="{{ request.GET.date }}">
+        <button type="submit" class="search-btn">Search</button>
+    </form>
+</div>
+
+<div class="posts-grid">
+    {% for post in posts %}
+        <div class="post-card" id="post{{ post.id }}">
+            <div class="post-image-box">
+                {% if post.image_file %}
+                    <img src="{{ post.image_file.url }}" alt="{{ post.title }}" class="post-image">
+                {% elif post.image_url %}
+                    <img src="{{ post.image_url }}" alt="{{ post.title }}" class="post-image">
+                {% else %}
+                    <div class="no-image">No image</div>
+                {% endif %}
+            </div>
+
+            <h2 class="post-title">{{ post.title }}</h2>
+            <p>Target: ${{ post.target_amount }}</p>
+            <p class="current-amount">Current: ${{ post.current_amount }}</p>
+
+            <div class="countdown-box"
+                 data-start="{{ post.start_time|date:'Y-m-d H:i:s' }}"
+                 data-end="{{ post.end_time|date:'Y-m-d H:i:s' }}"
+                 data-id="{{ post.id }}">
+                <p id="countdown{{ post.id }}" class="countdown-text">Loading...</p>
+            </div>
+
+            <div class="post-actions">
+                <a class="btn" href="{% url 'post_detail' post.id %}">View</a>
+                <a class="btn" id="cart-btn{{ post.id }}" href="{% url 'add_to_cart' post.id %}">Add to Cart</a>
+            </div>
+        </div>
+    {% empty %}
+        <p>No posts yet</p>
+    {% endfor %}
+</div>
+
+<script src="{% static 'counter.js' %}"></script>
+{% endblock %}
